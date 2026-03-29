@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SDA-COSTINDEX</title>
+
+<!-- PWA iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SDA-COSTINDEX">
+
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- Android / général -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3498db">
+
+<style>
+/* ton CSS inchangé */
+</style>
+</head>
+<style>
+body { font-family: Arial; background:#f2f4f7; margin:0; }
+.container { padding:15px; max-width:500px; margin:auto; }
+
+h2 { text-align:center; }
+
+.card {
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+input,select {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+.row { display:flex; gap:8px; }
+.row input,.row select { flex:1; }
+
+button {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:16px;
+}
+
+.add { background:#3498db; color:white; }
+.calc { background:#2ecc71; color:white; }
+.supprimer { background:#e74c3c; color:white; width:50px; }
+
+.result-item {
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+  background:#fafafa;
+}
+
+.meilleur {
+  background:#d4edda;
+  font-weight:bold;
+}
+
+.details {
+  font-size:13px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>✈️ SDA-COSTINDEX</h2>
+
+<div class="card">
+<label>AVION</label>
+<select id="avion" onchange="majCoutMinute()">
+  <option value="E55P">E55P</option>
+  <option value="C525">C525</option>
+</select>
+
+<label>Mode</label>
+<select id="modeCalcul">
+  <option value="TP">TP </option>
+  <option value="GIE">GIE </option>
+</select>
+
+<label>Prix carburant (€/L)</label>
+<input id="prix" type="number" step="0.01" value="1">
+
+<label>Coût(€/minute)</label>
+<input id="minute" type="number">
+</div>
+
+<div id="container"></div>
+
+<button class="add" onclick="ajouterLigne()">➕ Ajouter une ligne</button>
+<button class="calc" onclick="calculer()">Calculer</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+// FL options
+function genererOptionsFL(){
+  let o=`<option value="">FL</option>`;
+  for(let i=180;i<=450;i+=10){
+    o+=`<option value="${i}">${i}</option>`;
+  }
+  return o;
+}
+
+// unité conso
+function getUniteConso(){
+  return avion.value==="E55P" ? "KG" : "LBS";
+}
+
+// ajouter ligne
+function ajouterLigne(){
+  let d=document.createElement("div");
+  d.className="card";
+
+  d.innerHTML=`
+    <div class="row">
+      <select class="nom">${genererOptionsFL()}</select>
+      <input class="tdv" type="number" placeholder="TDV (min)">
+    </div>
+    <div class="row">
+      <input class="conso" type="number" placeholder="CONSO (${getUniteConso()})">
+      <button class="supprimer" onclick="this.parentElement.parentElement.remove()">🗑</button>
+    </div>
+  `;
+
+  container.appendChild(d);
+}
+
+// MAJ avion
+function majCoutMinute(){
+  minute.value = avion.value==="E55P" ? 55 : 35;
+
+  document.querySelectorAll(".conso").forEach(i=>{
+    i.placeholder = `CONSO (${getUniteConso()})`;
+  });
+}
+
+// calcul
+function calculer(){
+
+  let prix=parseFloat(prixInput.value)||0;
+  let minute=parseFloat(minuteInput.value)||0;
+  let mode=modeCalcul.value;
+
+  let noms=document.querySelectorAll(".nom");
+  let tdvs=document.querySelectorAll(".tdv");
+  let consos=document.querySelectorAll(".conso");
+
+  let res=[];
+
+  for(let i=0;i<noms.length;i++){
+
+    let nom=noms[i].value ? `FL${noms[i].value}` : "FL ?";
+    let tdv=parseFloat(tdvs[i].value)||0;
+    let conso=parseFloat(consos[i].value)||0;
+
+    // conversion litres
+    let consoL = avion.value==="E55P"
+      ? conso/0.8
+      : (conso*0.453592)/0.8;
+
+    let coutTemps = tdv * minute;
+    let coutCarb = consoL * prix;
+    let total = coutTemps + coutCarb;
+
+    let score;
+    let poids = 0.5;
+
+    if(mode==="TP"){
+      score = total;
+    } else {
+      score = consoL + (poids * tdv);
+    }
+
+    res.push({
+      nom,
+      total,
+      coutTemps,
+      coutCarb,
+      consoL,
+      score
+    });
+  }
+
+  let min=Math.min(...res.map(r=>r.score));
+
+  let html = `<div class="card"><strong>${avion.value} — Mode ${mode}</strong></div>`;
+
+  res.forEach(r=>{
+    let cls = r.score===min ? "result-item meilleur" : "result-item";
+
+    html+=`
+      <div class="${cls}">
+        ${r.nom} : ${r.total.toFixed(2)} €
+        <div class="details">
+          ⏱ ${r.coutTemps.toFixed(1)} € |
+          ⛽ ${r.coutCarb.toFixed(1)} € 
+        </div>
+      </div>
+    `;
+  });
+
+  result.innerHTML = html;
+}
+
+// refs
+let prixInput=document.getElementById("prix");
+let minuteInput=document.getElementById("minute");
+let avion=document.getElementById("avion");
+let modeCalcul=document.getElementById("modeCalcul");
+let container=document.getElementById("container");
+let result=document.getElementById("result");
+
+// init
+ajouterLigne();
+ajouterLigne();
+majCoutMinute();
+
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js")
+    .then(() => console.log("SW OK"))
+    .catch(err => console.log("SW erreur", err));
+}
+</script>
+</body>
+</html>
