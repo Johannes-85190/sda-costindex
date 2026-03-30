@@ -22,30 +22,16 @@
 </style>
 </head>
 <style>
+<style>
+
+/* ===== GLOBAL FIX ===== */
+* {
+  box-sizing: border-box;
+}
+
 body { font-family: Arial; background:#f2f4f7; margin:0; }
 .container { padding:15px; max-width:500px; margin:auto; }
-  .ligne-compacte {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
 
-.ligne-compacte select {
-  flex: 0.9;
-}
-
-.ligne-compacte .tdv {
-  flex: 0.8;
-}
-
-.ligne-compacte .conso {
-  flex: 1.2;
-}
-
-.ligne-compacte .supprimer {
-  flex: 0 0 40px;
-  padding: 8px;
-}
 h2 { text-align:center; }
 
 .card {
@@ -56,17 +42,60 @@ h2 { text-align:center; }
   box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
+/* ===== ROW ===== */
+.row {
+  display:flex;
+  gap:10px;
+}
+
+/* ===== ALIGNEMENT PRIX / COUT ===== */
+.field {
+  flex:1;
+  max-width:48%;
+}
+
+.field label {
+  font-size:13px;
+}
+
+.field input {
+  width:100%;
+  height:38px;
+}
+
+/* ===== INPUT GLOBAL ===== */
 input,select {
   width:100%;
-  padding:10px;
-  margin:5px 0;
   border-radius:8px;
   border:1px solid #ddd;
 }
 
-.row { display:flex; gap:8px; }
-.row input,.row select { flex:1; }
+/* ===== LIGNE COMPACTE ===== */
+.ligne-compacte {
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
 
+.ligne-compacte select { flex:0.9; }
+.ligne-compacte .tdv { flex:0.8; }
+.ligne-compacte .conso { flex:1.2; }
+
+.ligne-compacte .supprimer {
+  flex:0 0 40px;
+  padding:6px;
+  height:32px;
+}
+
+.ligne-compacte input,
+.ligne-compacte select {
+  height:32px;
+  padding:4px 8px;
+  font-size:13px;
+  margin:0;
+}
+
+/* ===== BUTTON ===== */
 button {
   width:100%;
   padding:12px;
@@ -78,8 +107,9 @@ button {
 
 .add { background:#3498db; color:white; }
 .calc { background:#2ecc71; color:white; }
-.supprimer { background:#e74c3c; color:white; width:50px; }
+.supprimer { background:#e74c3c; color:white; }
 
+/* ===== RESULT ===== */
 .result-item {
   padding:10px;
   border-radius:10px;
@@ -96,26 +126,8 @@ button {
   font-size:13px;
   color:#555;
 }
-/* ===== ALIGNEMENT CHAMPS ===== */
-.field {
-  flex: 1;
-  max-width: 48%;
-}
 
-.field label {
-  font-size: 13px;
-}
-
-.field input {
-  width: 100%;
-  height: 38px;
-}
-
-/* améliore la répartition */
-.row {
-  display: flex;
-  gap: 10px;
-}
+</style>
 </style>
 </head>
 
