@@ -44,14 +44,13 @@ h2 { text-align:center; }
 
 /* ===== ROW ===== */
 .row {
-  display:flex;
-  gap:10px;
+  display: flex;
+  gap: 12px; /* plus d’espace */
 }
 
 /* ===== ALIGNEMENT PRIX / COUT ===== */
 .field {
-  flex:1;
-  max-width:48%;
+  flex: 1;
 }
 
 .field label {
@@ -126,7 +125,13 @@ button {
   font-size:13px;
   color:#555;
 }
+.field input {
+  height: 34px; /* réduit la hauteur */
+}
 
+.field {
+  min-width: 0; /* évite que les champs se touchent */
+}
 </style>
 </style>
 </head>
