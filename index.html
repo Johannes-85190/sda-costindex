@@ -96,12 +96,25 @@ button {
   font-size:13px;
   color:#555;
 }
+/* ===== ALIGNEMENT CHAMPS ===== */
 .field {
   flex: 1;
+  max-width: 48%;
 }
 
 .field label {
   font-size: 13px;
+}
+
+.field input {
+  width: 100%;
+  height: 38px;
+}
+
+/* améliore la répartition */
+.row {
+  display: flex;
+  gap: 10px;
 }
 </style>
 </head>
@@ -129,11 +142,11 @@ button {
     <label>Prix carburant(€/L)</label>
     <input id="prix" type="number" step="0.01" value="1">
   </div>
+  
   <div class="field">
     <label>Coût(€/minute)</label>
     <input id="minute" type="number">
   </div>
-</div>
 </div>
 
 <div id="container"></div>
