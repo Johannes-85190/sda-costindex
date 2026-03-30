@@ -24,7 +24,28 @@
 <style>
 body { font-family: Arial; background:#f2f4f7; margin:0; }
 .container { padding:15px; max-width:500px; margin:auto; }
+  .ligne-compacte {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
 
+.ligne-compacte select {
+  flex: 0.9;
+}
+
+.ligne-compacte .tdv {
+  flex: 0.8;
+}
+
+.ligne-compacte .conso {
+  flex: 1.2;
+}
+
+.ligne-compacte .supprimer {
+  flex: 0 0 40px;
+  padding: 8px;
+}
 h2 { text-align:center; }
 
 .card {
@@ -76,28 +97,6 @@ button {
   color:#555;
 }
 </style>
-  .ligne-compacte {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.ligne-compacte select {
-  flex: 0.9;
-}
-
-.ligne-compacte .tdv {
-  flex: 0.8;
-}
-
-.ligne-compacte .conso {
-  flex: 1.2;
-}
-
-.ligne-compacte .supprimer {
-  flex: 0 0 40px;
-  padding: 8px;
-}
 </head>
 
 <body>
