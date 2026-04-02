@@ -318,7 +318,7 @@ function ajouterLigne(){
 
 // MAJ avion
 function majCoutMinute(){
-  minute.value = avion.value==="E55P" ? 55 : 35;
+  minute.value = avion.value==="E55P" ? 48 : 35;
 
   document.querySelectorAll(".conso").forEach(i=>{
     i.placeholder = `CONSO (${getUniteConso()})`;
@@ -346,8 +346,8 @@ function calculer(){
 
     // conversion litres
     let consoL = avion.value==="E55P"
-      ? conso/0.8
-      : (conso*0.453592)/0.8;
+      ? conso/0.79
+      : (conso*0.453592)/0.79;
 
     let coutTemps = tdv * minute;
     let coutCarb = consoL * prix;
