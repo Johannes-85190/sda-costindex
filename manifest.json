@@ -1,6 +1,6 @@
 {
-  "name": "SDA COSTINDEX",
-  "short_name": "COSTINDEX",
+  "name": "SDA-FL ADVISOR",
+  "short_name": "FL ADVISOR",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f2f4f7",
